@@ -29,8 +29,10 @@ public class CategoryService {
 
     }
 
-    public Category findById(Long id) {
+    public Category findOneById(Long id) {
         return categoryRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Category with id " + id + " not exists"));
     }
+
+
 }
