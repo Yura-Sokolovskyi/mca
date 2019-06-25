@@ -3,9 +3,14 @@ package yurii.sokolovskyi.mca.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import yurii.sokolovskyi.mca.dto.request.ProductRequest;
+import yurii.sokolovskyi.mca.entity.Category;
+import yurii.sokolovskyi.mca.entity.IngredientCount;
 import yurii.sokolovskyi.mca.entity.Product;
-import yurii.sokolovskyi.mca.repository.CategoryRepository;
 import yurii.sokolovskyi.mca.repository.ProductRepository;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class ProductService {
@@ -16,16 +21,42 @@ public class ProductService {
     @Autowired
     private CategoryService categoryService;
 
-    public void create(ProductRequest request){
+    @Autowired
+    private IngredientCountService ingredientCountService;
 
-        Product product = new Product();
+
+    public void create(ProductRequest request) {
+        productRepository.save(productRequestToProduct(null, request));
+    }
+
+    public void update(Long id, ProductRequest request) {
+        productRepository.save(productRequestToProduct(findOneById(id), request));
+    }
+
+    private Product productRequestToProduct(Product product, ProductRequest request) {
+        if (product == null) {
+            product = new Product();
+            productRepository.save(product);
+        }
         product.setName(request.getName());
         product.setPrice(request.getPrice());
         product.setImage(request.getImage());
         product.setInfo(request.getInfo());
         product.setCategory(categoryService.findOneById(request.getCategoryId()));
-        productRepository.save(product);
-
+        for (Map.Entry<Long, Double> entry : request.getIngredientsCount().entrySet()) {
+            Long aLong = entry.getKey();
+            Double aDouble = entry.getValue();
+            ingredientCountService.create(aDouble, aLong, product, null);
+        }
+        return product;
     }
+
+
+    public Product findOneById(Long id) {
+        return productRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Product with id " + id + " not exists"));
+    }
+
+
 
 }
