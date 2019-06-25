@@ -3,6 +3,7 @@ package yurii.sokolovskyi.mca.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import yurii.sokolovskyi.mca.dto.request.ProductRequest;
+import yurii.sokolovskyi.mca.dto.response.ProductResponse;
 import yurii.sokolovskyi.mca.entity.Category;
 import yurii.sokolovskyi.mca.entity.IngredientCount;
 import yurii.sokolovskyi.mca.entity.Product;
@@ -11,6 +12,7 @@ import yurii.sokolovskyi.mca.repository.ProductRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
@@ -51,6 +53,9 @@ public class ProductService {
         return product;
     }
 
+    public List<ProductResponse> findByCategory(Long id){
+        return productRepository.findByCategoryId(categoryService.findOneById(id)).stream().map(ProductResponse::new).collect(Collectors.toList());
+    }
 
     public Product findOneById(Long id) {
         return productRepository.findById(id)

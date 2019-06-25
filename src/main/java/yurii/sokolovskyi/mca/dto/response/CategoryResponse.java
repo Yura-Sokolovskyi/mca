@@ -9,9 +9,13 @@ import yurii.sokolovskyi.mca.entity.Category;
 public class CategoryResponse {
     private String name;
     private Long id;
+    private String image;
+    private String color;
 
     public CategoryResponse(Category category) {
         name = category.getName();
         id = category.getId();
+        image = category.getImage();
+        color = category.getColor();
     }
 }

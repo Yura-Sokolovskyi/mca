@@ -22,6 +22,8 @@ public class Category {
 
     private String image;
 
+    private String color;
+
     @OneToMany(mappedBy = "category")
     private List<Product> products = new ArrayList<>();
 }
