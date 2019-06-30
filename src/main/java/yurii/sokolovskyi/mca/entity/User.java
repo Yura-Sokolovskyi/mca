@@ -38,6 +38,9 @@ public class User {
     @OneToMany (mappedBy = "user")
     private List<Order> orders = new ArrayList<>();
 
+    @ManyToOne
+    private Cart cart;
+
 
     @ManyToMany
     private List<Discount> discounts = new ArrayList<>();

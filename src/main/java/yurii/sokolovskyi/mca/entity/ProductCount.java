@@ -24,4 +24,7 @@ public class ProductCount {
     @ManyToOne
     private Order order;
 
+    @ManyToOne
+    private Cart cart;
+
 }
