@@ -30,7 +30,6 @@ function appendProductByCategory() {
        let categoryColor = $(e.target).children().css( "background-color");
        let categoryName = $(e.target).children().text();
        let flag = 0;
-
        $('.nav-info-container').css("background-color",categoryColor);
        $('.sc-category-info').text(categoryName);
 

@@ -8,6 +8,9 @@ import lombok.Setter;
 public class CategoryRequest {
 
     private String name;
+    private String color;
+    private String data;
+    private String fileName;
 
 
 }

@@ -4,8 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import yurii.sokolovskyi.mca.dto.request.CategoryRequest;
 import yurii.sokolovskyi.mca.dto.response.CategoryResponse;
+import yurii.sokolovskyi.mca.entity.Product;
 import yurii.sokolovskyi.mca.service.CategoryService;
+import yurii.sokolovskyi.mca.service.ProductService;
 
+import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -16,12 +20,17 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @PostMapping
-    public void create(@RequestBody CategoryRequest request) {
+    public void create(@Valid @RequestBody CategoryRequest request) throws IOException {
         categoryService.create(request);
     }
 
     @GetMapping
     public List<CategoryResponse> findAll() {
         return categoryService.findAll();
+    }
+
+    @DeleteMapping
+    public void delete(Long id) {
+        categoryService.delete(id);
     }
 }

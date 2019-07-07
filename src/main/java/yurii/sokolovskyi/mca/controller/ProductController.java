@@ -24,4 +24,7 @@ public class ProductController {
     @GetMapping
     public List<ProductResponse> findByCategory(Long id) {return productService.findByCategory(id);}
 
+    @DeleteMapping ("/deleteByCategory")
+    public void deleteProductsByCategory(Long id) {productService.deleteProductsByCategory(id);}
+
 }

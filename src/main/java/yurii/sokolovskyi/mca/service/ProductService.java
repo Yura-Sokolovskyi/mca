@@ -62,6 +62,8 @@ public class ProductService {
                 .orElseThrow(() -> new IllegalArgumentException("Product with id " + id + " not exists"));
     }
 
-
-
+    public void deleteProductsByCategory(Long id) {
+        productRepository.findByCategoryId(categoryService.findOneById(id)).forEach(product -> productRepository.delete(product));
+        categoryService.delete(id);
+    }
 }

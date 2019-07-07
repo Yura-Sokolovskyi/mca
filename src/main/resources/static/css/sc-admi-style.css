@@ -1,0 +1,204 @@
+body, html,.sc-admin-content-container, .sc-admin-left-block, .sc-admin-right-block {
+    height: 100%;
+}
+
+.sc-admin-content-container{
+
+    display: flex;
+
+}
+
+.sc-admin-left-block{
+    width: 220px;
+    background-color: #162328;
+}
+
+.sc-admin-right-block{
+
+    width: calc(100% - 220px);
+
+}
+
+.sc-admin-photo {
+    width: 80px;
+    height: 80px;
+    border-radius: 40px;
+    background: center/cover;
+}
+
+.sc-admin-login-container {
+    width: 100%;
+    height: 270px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+
+
+.sc-admin-buttons-container {
+    width: 70%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.sc-admin-register-btn, .sc-admin-sing-in-btn {
+    width: 70%;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 5px 0;
+}
+
+.sc-admin-sing-in-btn {
+    background-color: dodgerblue;
+    border-radius: 15px;
+    color: #ffffff;
+}
+
+.sc-admin-register-btn {
+    color: grey;
+}
+
+.sc-admin-menu-container {
+    background-color: #222d33;
+}
+
+.sc-admin-menu-item {
+    width: 100%;
+    height: 40px;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    color: grey;
+}
+
+
+
+.sc-admin-menu-item.active{
+    background-color: dodgerblue;
+    color: white;
+}
+
+.sc-admin-right-block-head-menu {
+    width: 100%;
+    height: 50px;
+    background-color: #222d33;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding:  0 30px;
+}
+
+.sc-admin-category-image-indicator {
+    height: 30px;
+    width: 30px;
+    border-radius: 15px;
+    background: center/cover;
+}
+.sc-admin-category-color-indicator {
+    height: 20px;
+    width: 20px;
+    border-radius: 10px;
+}
+
+.sc-admin-table-item {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sc-admin-table-item svg {
+    margin: 0 5px;
+    fill: #222d33;
+}
+
+.sc-admin-table-item svg:hover {
+    fill: dodgerblue;
+    cursor: pointer;
+}
+
+.sc-admin-table-item .add-button {
+    height: 30px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    color: white;
+    background-color: dodgerblue;
+    padding-left:10px;
+}
+
+.sc-admin-table-item .add-button:hover {
+
+    background-color: #118b00;
+    cursor: pointer;
+
+}
+
+.sc-admin-table-item .add-button svg{
+    padding: 0 10px;
+    fill: white;
+}
+
+.sc-admin-navigation {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.sc-admin-delete-button, .sc-admin-edit-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sc-admin-modal-category-group-container {
+    display: flex;
+}
+
+.sc-admin-category-img, .sc-admin-category-color {
+    height: 50px;
+    width: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 25px;
+    margin: 20px;
+    background: center/cover;
+    transition: all 300ms;
+}
+
+.sc-admin-category-img svg, .sc-admin-category-color svg {
+    fill: white;
+    transition: all 300ms;
+    opacity: 0;
+}
+
+.sc-admin-category-img:hover svg, .sc-admin-category-color:hover svg {
+    opacity: 1;
+}
+
+.sc-admin-category-img:hover , .sc-admin-category-color:hover  {
+    cursor: pointer;
+}
+
+
+.sc-admin-modal-category-group-container .form-control{
+    border-radius: 20px;
+    height: 40px;
+
+}
+
+.sc-admin-modal-category-group-container .form-group{
+    width: 70%;
+    display: flex;
+    align-items: center;
+    margin: 0;
+}

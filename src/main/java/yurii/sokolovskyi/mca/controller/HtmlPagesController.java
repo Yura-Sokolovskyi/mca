@@ -7,8 +7,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class HtmlPagesController {
 
     @RequestMapping("index")
-    public String category() {
+    public String index() {
         return "index.html";
+    }
+
+    @RequestMapping("admin")
+    public String admin() {
+        return "admin.html";
     }
 
 
