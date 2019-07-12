@@ -20,5 +20,4 @@ public class StaticResourcesConfiguration implements WebMvcConfigurer {
         registry.addResourceHandler("/images/**")
                 .addResourceLocations(Paths.get(IMG_DIR).toUri().toString());
     }
-
 }
