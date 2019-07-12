@@ -15,7 +15,7 @@ $.ajax({
 
 function appendCategory(category) {
     $('.sc-category-menu-item-container').append(`<div class=" col-md-4 col-sm-6 sc-category-menu-item" ">
-                <div data-id="${category.id}" class="sc-category-menu-item-content sc-flex-centred product-menu-item"  style="background-image: url(${"images/" + category.image + ".jpg"})">
+                <div data-id="${category.id}" class="sc-category-menu-item-content sc-flex-centred product-menu-item"  style="background-image: url(${"images/" + category.image})">
                  <div class="sc-item-title sc-flex-centred" style="background-color:${category.color}">${category.name}</div>
 
                    </div>
@@ -26,20 +26,24 @@ function appendCategory(category) {
 
 function appendProductByCategory() {
    $('.sc-category-menu-item').click((e)=>{
-       let id = e.target.getAttribute('data-id');
-       let categoryColor = $(e.target).children().css( "background-color");
-       let categoryName = $(e.target).children().text();
-       let flag = 0;
-       $('.nav-info-container').css("background-color",categoryColor);
-       $('.sc-category-info').text(categoryName);
 
-       console.log(categoryName);
+       let $categoryContainer = $(e.target).closest('.sc-category-menu-item-content');
+
+       let $id = $categoryContainer.data("id");
+       console.log($id);
+       let $categoryColor = $categoryContainer.children().css( "background-color");
+       let $categoryName = $categoryContainer.text();
+       let flag = 0;
+       $('.nav-info-container').css("background-color",$categoryColor);
+       $('.sc-category-info').text($categoryName);
+
+       console.log($categoryName);
 
        $('.sc-category-menu-item').fadeOut("slow", ()=>{
 
            if (flag == 0){
                $.ajax({
-                   url: 'http://localhost:8080/product?id=' + id,
+                   url: 'http://localhost:8080/product?id=' + $id,
                    type: 'get',
                    success: function (response) {
                        for (let product of response) {
