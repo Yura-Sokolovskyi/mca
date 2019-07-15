@@ -1,4 +1,5 @@
 body, html {
+    height: 100%;
 }
 
 .sc-flex-centred {
@@ -229,6 +230,7 @@ body, html {
 .sc-order-buttons-container {
     display: flex;
     flex-direction: row;
+    margin: 0 -15px;
 }
 
 .sc-order-buttons-container div {
@@ -255,6 +257,7 @@ body, html {
     border-top: 1px solid #333333;
     background-color: #2b2a2a;
     color: #fff;
+    margin: 0 -15px;
 }
 
 .sc-order-info-item-container {
@@ -273,7 +276,7 @@ body, html {
 }
 .sc-order-products-container {
     overflow-y: scroll;
-    height: 100%;
+    height: calc(100% - 145px);
     margin: 0 -10px;
 
 }
@@ -402,10 +405,8 @@ body, html {
 }
 
 .sc-discount-buttons-container .active {
-
     background-color: dodgerblue;
     color: #FFFFFF;
-
 }
 
 .sc-modal {
@@ -427,3 +428,74 @@ body, html {
     font-size: 1.2em;
 }
 
+.logging-container {
+    width: 100%;
+    height: 100%;
+    background-color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logging-form {
+    width: 25%;
+    padding: 20px;
+    border-radius: 3px;
+    background-color: white;
+}
+
+.logging-form button{
+    float: right;
+}
+
+.header-container {
+    height: 50px;
+    width: 100%;
+    background-color: #333;
+}
+
+.header-container a{
+    text-decoration: none;
+}
+
+.header-right-menu, .header-left-menu {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 20px;
+
+}
+.header-right-menu{
+    float: right;
+}
+
+.header-left-menu{
+    float: left;
+}
+
+.header-right-menu input{
+    background: none;
+    border: none;
+}
+ .header-left-button{
+    height: 30px;
+    padding: 0 20px;
+    color: white;
+}
+.header-left-button:hover {
+    fill: dodgerblue;
+}
+
+.header-left-button:hover .settings-button{
+    color: dodgerblue;
+}
+
+
+.header-left-button.last {
+    border-left: 1px solid #adadad;
+}
+
+.header-left-button span {
+    margin-left: 5px;
+}

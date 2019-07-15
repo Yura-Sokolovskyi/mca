@@ -7,6 +7,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -26,11 +27,15 @@ public class User {
 
     private String login;
 
+    private Boolean active;
+
     @OneToMany (mappedBy = "user")
     private List<Invoice> invoices = new ArrayList<>();
 
-    @OneToMany (mappedBy = "user")
-    private List<Role> roles = new ArrayList<>();
+    @ElementCollection (targetClass = Role.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
+    @Enumerated(EnumType.STRING)
+    private Set<Role> roles;
 
     @ManyToMany
     private List<Cafe> cafes = new ArrayList<>();

@@ -4,9 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import yurii.sokolovskyi.mca.dto.request.CategoryRequest;
 import yurii.sokolovskyi.mca.dto.response.CategoryResponse;
-import yurii.sokolovskyi.mca.entity.Product;
 import yurii.sokolovskyi.mca.service.CategoryService;
-import yurii.sokolovskyi.mca.service.ProductService;
 
 import javax.validation.Valid;
 import java.io.IOException;
