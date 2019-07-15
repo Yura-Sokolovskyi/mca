@@ -11,5 +11,5 @@ import javax.persistence.*;
 
 
 public enum  Role {
- USER;
+ ADMIN, CLIENT, WORKER
 }

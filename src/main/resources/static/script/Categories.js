@@ -26,12 +26,26 @@ $(document).on('click', '.sc-nav-back-button',()=>{
     appendCategoryToMenu();
 });
 
+$(document).on('click', '.sc-client-select',()=>{
+    if( $( ".sc-client-select-option-container" ).css('display') === 'none') {
+        openSelect();
+    } else {
+        closeSelect();
+    }
+});
+
+$(document).on("click", ".sc-client-select-option", function(){
+    $('.sc-client-select-title').val($(this).text());
+    closeSelect();
+});
+
+
 $.ajax({
-    url: 'http://localhost:8080/user/select-all',
+    url: 'http://localhost:8080/user/get-user-for-select?direction=ASC&field=name&page=0&size=50',
     type: 'get',
     success: function (response) {
-        for (let user of response) {
-            addUserToSelect(user);
+        for (let user of response.data) {
+            addOptionToUserSelect(user);
         }
     }
 });
@@ -63,10 +77,6 @@ function createCategory(category) {
         `);
 
 }
-
-
-
-
 
 function appendProductByCategory() {
    $('.sc-category-menu-item').click((e)=>{
@@ -188,13 +198,6 @@ function doubleToStringsByDot($double) {
     return $strings;
 }
 
-function addUserToSelect(user) {
-
-    $('.sc-client-select-option-container').append(`<div class="sc-client-select-option">${user.name}</div>`)
-
-}
-
-
 /*--------- Category menu view ----------- */
 
 function gridViewChanger() {
@@ -264,6 +267,40 @@ function productMenuClose() {
         duration: 300,
         step: function(now) {
             $(".sc-nav-back-button svg" ).css({
+                transform: 'rotate(' + now + 'deg)'
+            });
+        }
+    });
+}
+
+function addOptionToUserSelect(user) {
+    $( ".sc-client-select-option-container" ).append(`<div class='sc-client-select-option'>${user.name}</div>`);
+
+}
+
+function openSelect() {
+    $(".sc-client-select-option-container").css({
+        display: 'block'
+    });
+    $({deg: 0}).animate({deg: 180}, {
+        duration: 300,
+        step: function(now) {
+            $(".sc-client-select svg" ).css({
+                transform: 'rotate(' + now + 'deg)'
+            });
+        }
+    });
+}
+
+function closeSelect() {
+    $(".sc-client-select-option-container").css({
+        display: 'none'
+    });
+
+    $({deg: 180}).animate({deg: 0}, {
+        duration: 300,
+        step: function(now) {
+            $(".sc-client-select svg" ).css({
                 transform: 'rotate(' + now + 'deg)'
             });
         }
