@@ -26,8 +26,8 @@ public class Cart {
 
     private LocalTime time;
 
-    @OneToMany (mappedBy = "cart")
-    private List<User> users;
+    @OneToOne (mappedBy = "cart")
+    private User user;
 
     @OneToMany(mappedBy = "cart")
     private List<ProductCount> productCounts = new ArrayList<>();

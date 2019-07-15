@@ -1,58 +1,57 @@
 $(document).ready(function(){
 
-    /*--------- Category menu view ----------- */
+    /*/!*--------- Category menu view ----------- *!/
 
-    var gridViewButton, listViewButton, categoryItemContainer, categoryItemTitle, categoryItemPrice;
+    function gridViewChanger() {
+        var gridViewButton, listViewButton, categoryItemContainer, categoryItemTitle, categoryItemPrice;
 
-    gridViewButton = $('.sc-view-button-grid');
-    listViewButton = $('.sc-view-button-list');
-    categoryItemContainer = $('.sc-category-menu-item-content');
-    categoryItemTitle = $('.sc-item-title');
-    categoryItemPrice  = $('.sc-item-price');
+        gridViewButton = $('.sc-view-button-grid');
+        listViewButton = $('.sc-view-button-list');
+        categoryItemContainer = $('.sc-category-menu-item-content');
+        categoryItemTitle = $('.sc-item-title');
+        categoryItemPrice  = $('.sc-item-price');
 
 
-    gridViewButton.click(function () {
-        gridViewButton.css('display','none');
-        listViewButton.css('display','block');
+        gridViewButton.click(function () {
+            gridViewButton.css('display','none');
+            listViewButton.css('display','block');
 
-        categoryItemContainer.css({
-            height: 'auto',
-            borderRadius: '0px'
+            categoryItemContainer.css({
+                height: 'auto',
+                borderRadius: '0px'
+            });
+
+            categoryItemTitle.css({
+                width: '100%',
+                height: '60px'
+            });
+
+            categoryItemPrice.css({
+                height: '60px'
+            });
         });
 
-        categoryItemTitle.css({
-            width: '100%',
-            height: '60px'
+        listViewButton.click(function () {
+            listViewButton.css('display','none');
+            gridViewButton.css('display','block');
+
+            categoryItemContainer.css({
+                height: '150px',
+                borderRadius: '10px'
+            });
+
+            categoryItemTitle.css({
+                width: '50%',
+                height: '40%'
+            });
+
+            categoryItemPrice.css({
+                height: '40%'
+            });
         });
+    }
 
-        categoryItemPrice.css({
-            height: '60px'
-        });
-
-
-    });
-
-    listViewButton.click(function () {
-        listViewButton.css('display','none');
-        gridViewButton.css('display','block');
-
-        categoryItemContainer.css({
-            height: '150px',
-            borderRadius: '10px'
-        });
-
-        categoryItemTitle.css({
-            width: '50%',
-            height: '40%'
-        });
-
-        categoryItemPrice.css({
-            height: '40%'
-        });
-
-    });
-
-    /*--------- Category menu view end ----------- */
+    /!*--------- Category menu view end ----------- *!/*/
 
     
 
@@ -128,3 +127,4 @@ function closeSelect() {
     });
     addOptionsToSelect();
 }
+
