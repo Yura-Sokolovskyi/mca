@@ -38,11 +38,9 @@ $(document).on('click', '.sc-client-select',()=>{
 $(document).on("click", ".sc-client-select-option", function(){
     $('.sc-client-select-title').val($(this).text());
     $('.sc-client-select-title').data("id",$(this).data("id"));
-    console.log($(this).data("id"));
 
     closeSelect();
 });
-
 
 
 
@@ -74,9 +72,6 @@ function getUsersForSelect() {
         })
 
 }
-
-
-
 
 function appendCategoryToMenu() {
     $('.sc-category-menu-item').remove();
@@ -161,7 +156,8 @@ function addProductToCart() {
             allPrice:$priceFloat,
             price: doubleToStringsByDot($priceFloat)[0],
             priceCoin: doubleToStringsByDot($priceFloat)[1]
-    }
+        };
+
 
         if(checkItemsInCart($productId)){
             changeItemQuantity("plus", $productId);
@@ -170,8 +166,48 @@ function addProductToCart() {
             calculateOrderSum();
         }
 
+        let request = {
+            "count": 1,
+            "productId": $product.id,
+            "userId": $('.sc-client-select-title').data("id")
+        };
+
+        $.ajax({
+            url: 'http://localhost:8080/product-count',
+            contentType: 'application/json',
+            type: 'post',
+            data: JSON.stringify(request),
+            success: function (response) {
+                console.log('post', response);
+            }
+        })
+
+
     });
 }
+
+
+function addProductToCartBD(product) {
+    let $cart = $('.sc-order-products-container');
+    let $cartItemTemplate = $('#cartItem');
+
+        let $product = {
+            id: product.id,
+            name: product.name,
+            priceDouble: product.price,
+            allPrice: product.price,
+            price: doubleToStringsByDot(product.price)[0],
+            priceCoin: doubleToStringsByDot(product.price)[1]
+        }
+
+
+            $($cartItemTemplate).tmpl($product).appendTo($cart);
+            calculateOrderSum();
+
+
+
+}
+
 
 function changeItemQuantity(type, id) {
     let existedItem = $(`.sc-order-products-container .sc-order-product-item-container[data-id=${id}]`);
@@ -323,7 +359,7 @@ function closeSelect() {
     $(".sc-client-select-option-container").css({
         display: 'none'
     });
-
+    getUserCart();
     $({deg: 180}).animate({deg: 0}, {
         duration: 300,
         step: function(now) {
@@ -332,5 +368,20 @@ function closeSelect() {
             });
         }
     });
+}
+
+function getUserCart() {
+    $('.sc-order-products-container .sc-order-product-item-container').remove();
+    let userId = $('.sc-client-select-title').data("id");
+    $.ajax({
+        url: 'http://localhost:8080/cart/get-user-cart?id=' + userId,
+        type: 'get',
+        success: function (response) {
+            for (let product of response) {
+                addProductToCartBD(product);
+            }
+        }
+    });
+
 }
 

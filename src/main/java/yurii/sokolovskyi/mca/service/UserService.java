@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import yurii.sokolovskyi.mca.dto.request.PaginationRequest;
 import yurii.sokolovskyi.mca.dto.request.UserCriteria;
 import yurii.sokolovskyi.mca.dto.response.*;
+import yurii.sokolovskyi.mca.entity.Cart;
 import yurii.sokolovskyi.mca.entity.User;
 import yurii.sokolovskyi.mca.repository.UserRepository;
 import yurii.sokolovskyi.mca.specification.UserSpecification;
@@ -18,7 +19,6 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
-
 
 
     public PageResponse<UserSelectResponse> findPage (PaginationRequest paginationRequest){
@@ -38,6 +38,8 @@ public class UserService {
                 .map(UserSelectResponse::new)
                 .collect(Collectors.toList());
     }
+
+
 
 
 
