@@ -3,6 +3,7 @@
  */
 $(document).ready(function(){
     appendCategoryToMenu();
+    getUsersForSelect();
 });
 
 
@@ -36,19 +37,45 @@ $(document).on('click', '.sc-client-select',()=>{
 
 $(document).on("click", ".sc-client-select-option", function(){
     $('.sc-client-select-title').val($(this).text());
+    $('.sc-client-select-title').data("id",$(this).data("id"));
+    console.log($(this).data("id"));
+
     closeSelect();
 });
 
 
-$.ajax({
-    url: 'http://localhost:8080/user/get-user-for-select?direction=ASC&field=name&page=0&size=50',
-    type: 'get',
-    success: function (response) {
-        for (let user of response.data) {
-            addOptionToUserSelect(user);
-        }
-    }
-});
+
+
+
+function getUsersForSelect() {
+
+    let paginationRequest = {
+        direction: "ASC",
+        field: "name",
+        page: 0,
+        size: 20
+    };
+    let request = {
+        role: "CLIENT",
+        "paginationRequest": paginationRequest
+    };
+
+        $.ajax({
+            url: 'http://localhost:8080/user/findByFilter',
+            contentType: 'application/json',
+            type: 'post',
+            data: JSON.stringify(request),
+            success: function (response) {
+                console.log('post', response);
+                for (let user of response){
+                    addOptionToUserSelect(user);
+                }
+            }
+        })
+
+}
+
+
 
 
 function appendCategoryToMenu() {
@@ -274,7 +301,7 @@ function productMenuClose() {
 }
 
 function addOptionToUserSelect(user) {
-    $( ".sc-client-select-option-container" ).append(`<div class='sc-client-select-option'>${user.name}</div>`);
+    $( ".sc-client-select-option-container" ).append(`<div class='sc-client-select-option' data-id="${user.id}">${user.name}</div>`);
 
 }
 

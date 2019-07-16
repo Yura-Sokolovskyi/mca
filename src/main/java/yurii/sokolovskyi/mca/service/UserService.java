@@ -2,13 +2,10 @@ package yurii.sokolovskyi.mca.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import yurii.sokolovskyi.mca.dto.request.PaginationRequest;
 import yurii.sokolovskyi.mca.dto.request.UserCriteria;
-import yurii.sokolovskyi.mca.dto.request.UserRequest;
 import yurii.sokolovskyi.mca.dto.response.*;
-import yurii.sokolovskyi.mca.entity.Product;
 import yurii.sokolovskyi.mca.entity.User;
 import yurii.sokolovskyi.mca.repository.UserRepository;
 import yurii.sokolovskyi.mca.specification.UserSpecification;
@@ -21,6 +18,8 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+
 
     public PageResponse<UserSelectResponse> findPage (PaginationRequest paginationRequest){
         Page<User> page = userRepository.findAll(paginationRequest.toPgeable());
@@ -39,5 +38,7 @@ public class UserService {
                 .map(UserSelectResponse::new)
                 .collect(Collectors.toList());
     }
+
+
 
 }

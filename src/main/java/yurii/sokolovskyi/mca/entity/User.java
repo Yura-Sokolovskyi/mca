@@ -32,10 +32,8 @@ public class User {
     @OneToMany (mappedBy = "user")
     private List<Invoice> invoices = new ArrayList<>();
 
-    @ElementCollection (targetClass = Role.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
-    private Set<Role> roles;
+    private Role role;
 
     @ManyToMany
     private List<Cafe> cafes = new ArrayList<>();
@@ -45,7 +43,6 @@ public class User {
 
     @OneToOne
     private Cart cart;
-
 
     @ManyToMany
     private List<Discount> discounts = new ArrayList<>();
