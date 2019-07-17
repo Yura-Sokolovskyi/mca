@@ -11,7 +11,6 @@ import java.util.List;
 
 public interface CartRepository extends JpaRepository<Cart, Long> {
 
-    @Query("from Product p where p.category = :userId")
-    List<Product> findByCategoryId(@Param("userId") Long id);
+
 
 }

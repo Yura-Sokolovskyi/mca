@@ -18,6 +18,8 @@ public class ProductCount {
 
     private Double count;
 
+    private Double price;
+
     @ManyToOne
     private Product product;
 

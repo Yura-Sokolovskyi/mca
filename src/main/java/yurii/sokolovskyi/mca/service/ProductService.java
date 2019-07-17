@@ -54,7 +54,8 @@ public class ProductService {
     }
 
     public List<ProductResponse> findByCategory(Long id){
-        return productRepository.findByCategoryId(categoryService.findOneById(id)).stream().map(ProductResponse::new).collect(Collectors.toList());
+        return productRepository.findByCategoryId(categoryService.findOneById(id))
+                .stream().map(ProductResponse::new).collect(Collectors.toList());
     }
 
     public Product findOneById(Long id) {
@@ -63,7 +64,8 @@ public class ProductService {
     }
 
     public void deleteProductsByCategory(Long id) {
-        productRepository.findByCategoryId(categoryService.findOneById(id)).forEach(product -> productRepository.delete(product));
+        productRepository.findByCategoryId(categoryService.findOneById(id))
+                .forEach(product -> productRepository.delete(product));
         categoryService.delete(id);
     }
 }
