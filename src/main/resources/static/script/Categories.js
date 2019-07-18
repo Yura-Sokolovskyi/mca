@@ -3,31 +3,44 @@
  */
 $(document).ready(function(){
     appendCategoryToMenu();
-    getUsersForSelect();
+    //getUsersForSelect();
+    getUserCart();
 });
 
 
 $(document).on('click', '.sc-order-product-item-quantity-button.minus',(e)=>{
-    let request = {
-        "count": 1,
-        "productId": $(e.target).closest('.sc-order-product-item-container').data("id"),
-        "userId": $('.sc-client-select-title').data("id"),
-        "sign": "-"
-    };
-    $.ajax({
-        url: 'http://localhost:8080/product-count',
-        contentType: 'application/json',
-        type: 'put',
-        data: JSON.stringify(request),
-        success: function (response) {
-            console.log(response);
-            addProductToCart(response);
+    let $quantity = parseInt($(e.target).closest('.sc-order-product-item-quantity-container')
+                    .find('.sc-order-product-item-quantity-input').val());
+    let $userId = $('.sc-client-select-title').data("id");
+    let $productId = $(e.target).closest('.sc-order-product-item-container').data("id");
 
-        }
-    });
-
-    //
-    // changeItemQuantity("minus", $(e.target).closest('.sc-order-product-item-container').data("id"));
+    if ($quantity === 1){
+        $.ajax({
+            url: 'http://localhost:8080/product-count?productId=' + $productId + '&userId=' + $userId,
+            type: 'DELETE',
+            success: function () {
+                $(e.target).closest('.sc-order-product-item-container').remove();
+                calculateOrderSum();
+            }
+        });
+    } else {
+        let request = {
+            "count": 1,
+            "productId": $productId,
+            "userId": $userId ,
+            "sign": "-"
+        };
+        $.ajax({
+            url: 'http://localhost:8080/product-count',
+            contentType: 'application/json',
+            type: 'put',
+            data: JSON.stringify(request),
+            success: function (response) {
+                console.log(response);
+                addProductToCart(response);
+            }
+        });
+    }
 });
 
 $(document).on('click', '.sc-order-product-item-quantity-button.plus',(e)=>{
@@ -54,11 +67,11 @@ $(document).on('click', '.sc-order-product-item-quantity-button.plus',(e)=>{
 });
 
 $(document).on('click', '.sc-order-product-item-remove-button',(e)=>{
-    let userId = $('.sc-client-select-title').data("id");
-    let productId = $(e.target).closest('.sc-order-product-item-container').data("id");
+    let $userId = $('.sc-client-select-title').data("id");
+    let $productId = $(e.target).closest('.sc-order-product-item-container').data("id");
 
     $.ajax({
-        url: 'http://localhost:8080/product-count?productId=' + productId + '&userId=' + userId,
+        url: 'http://localhost:8080/product-count?productId=' + $productId + '&userId=' + $userId,
         type: 'DELETE',
         success: function () {
             $(e.target).closest('.sc-order-product-item-container').remove();
@@ -82,40 +95,84 @@ $(document).on('click', '.sc-client-select',()=>{
     }
 });
 
-$(document).on("click", ".sc-client-select-option", function(){
-    $('.sc-client-select-title').val($(this).text());
-    $('.sc-client-select-title').data("id",$(this).data("id"));
+$(document).on("click", ".sc-client-select-option", (e)=>{
 
+    console.log($(e.target));
+
+    let $cartTitle = $('.sc-client-select-title');
+    let $userId = $(e.target).data("id");
+
+    $cartTitle.data("id",$userId);
+    if($userId === 2 ){
+        $cartTitle.val("SELECT CLIENT");
+    } else {
+        $cartTitle.val($(e.target).text());
+    }
+    getUserCart();
     closeSelect();
 });
 
-$(document).on("click", ".product-menu-item", function(e){
-    console.log("product:" + $(e.target).data("id"));
-    console.log("user:" + $('.sc-client-select-title').data("id"));
-    let request = {
-        "count": 1,
-        "productId": $(e.target).closest(".product-menu-item").data("id"),
-        "sign": "+",
-        "userId": $('.sc-client-select-title').data("id")
-    };
+$(document).on("click", ".product-menu-item", (e)=>{
+    let $userId = $('.sc-client-select-title').data("id");
+    let $productId = $(e.target).closest(".product-menu-item").data("id");
+
+        let request = {
+            "count": 1,
+            "productId": $productId,
+            "sign": "+",
+            "userId": $userId
+        };
+
+        $.ajax({
+            url: 'http://localhost:8080/product-count',
+            contentType: 'application/json',
+            type: 'put',
+            data: JSON.stringify(request),
+            success: function (response) {
+                addProductToCart(response);
+                console.log('post', response);
+            }
+        });
+
+    
+   
+});
+
+$(document).on('keyup', '.client-search-input input', (e)=>{
+
+    let $inputValue = $(e.target).val();
+    $('.sc-client-option-container').empty();
+
+    if($inputValue.length >= 3){
+        getUsersForSelect($inputValue);
+    }
+});
+
+$(document).on('click', '.sc-client-unregistered-button', ()=>{
+    $('.sc-client-select-title').data("id",2);
+    $('.sc-client-select-title').val("SELECT CLIENT");
+    getUserCart();
+    closeSelect();
+});
+
+$(document).on('click', '.sc-discount-order-button', ()=>{
+
+    let $userId = $('.sc-client-select-title').data("id");
 
     $.ajax({
-        url: 'http://localhost:8080/product-count',
-        contentType: 'application/json',
-        type: 'put',
-        data: JSON.stringify(request),
-        success: function (response) {
-            addProductToCart(response);
-            console.log('post', response);
+        url: 'http://localhost:8080/product-count/delete-all?id=' + $userId,
+        type: 'DELETE',
+        success: function () {
+            getUserCart();
+            calculateOrderSum();
         }
     });
+
+
 });
 
 
-
-
-function getUsersForSelect() {
-
+function getUsersForSelect(value) {
     let paginationRequest = {
         direction: "ASC",
         field: "name",
@@ -123,10 +180,11 @@ function getUsersForSelect() {
         size: 20
     };
     let request = {
+        name: value,
+        phoneNumber: value,
         role: "CLIENT",
         "paginationRequest": paginationRequest
     };
-
         $.ajax({
             url: 'http://localhost:8080/user/findByFilter',
             contentType: 'application/json',
@@ -134,12 +192,12 @@ function getUsersForSelect() {
             data: JSON.stringify(request),
             success: function (response) {
                 console.log('post', response);
+                $('.sc-client-option-container').empty();
                 for (let user of response){
                     addOptionToUserSelect(user);
                 }
             }
         })
-
 }
 
 function appendCategoryToMenu() {
@@ -213,22 +271,28 @@ function addProductToCart(product) {
     let $cart = $('.sc-order-products-container');
     let $cartItemTemplate = $('#cartItem');
 
+    if (product == undefined){
+
+        console.log(product);
+
+    } else {
+
         let $product = {
             id: product.id,
-            name: product.name ,
+            name: product.name,
             priceDouble: product.price,
             count: product.count,
             price: doubleToStringsByDot(product.price)[0],
             priceCoin: doubleToStringsByDot(product.price)[1]
         };
-        if(checkItemsInCart(product.id)){
+        if (checkItemsInCart(product.id)) {
             changeItemQuantity(product);
         } else {
             $($cartItemTemplate).tmpl($product).appendTo($cart);
 
         }
-    calculateOrderSum();
-
+        calculateOrderSum();
+    }
 }
 
 function changeItemQuantity(product) {
@@ -254,18 +318,19 @@ function checkItemsInCart(id) {
 }
 
 function calculateOrderSum() {
-    let sum=0;
+    let sum = 0.0;
     $('.sc-order-product-item-container').each(function() {
-        sum += parseFloat($(this).data("price"));
+        sum += $(this).data("price");
     });
-    console.log(sum);
+
+
     $('.sc-order-info-item-info').text(doubleToStringsByDot(sum)[0])
                                     .append("<sup>"+ doubleToStringsByDot(sum)[1] +"</sup>");
 
 }
 
 function doubleToStringsByDot($double) {
-    let $strings = $double.toString().split(".")
+    let $strings = parseFloat($double.toString()).toFixed(2).toString().split(".");
      if ($strings[1] != null && $strings[1].length === 1){
          $strings[1] += "0";
     } else if ($strings[1] == null) {
@@ -273,6 +338,8 @@ function doubleToStringsByDot($double) {
     }
     return $strings;
 }
+
+
 
 /*--------- Category menu view ----------- */
 
@@ -350,7 +417,7 @@ function productMenuClose() {
 }
 
 function addOptionToUserSelect(user) {
-    $( ".sc-client-select-option-container" ).append(`<div class='sc-client-select-option' data-id="${user.id}">${user.name}</div>`);
+    $( ".sc-client-option-container" ).append(`<div class='sc-client-select-option' data-id="${user.id}">${user.name}</div>`);
 
 }
 
@@ -372,7 +439,8 @@ function closeSelect() {
     $(".sc-client-select-option-container").css({
         display: 'none'
     });
-    getUserCart();
+    $('.client-search-input input').val("");
+    $('.sc-client-option-container').empty();
     $({deg: 180}).animate({deg: 0}, {
         duration: 300,
         step: function(now) {

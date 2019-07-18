@@ -30,4 +30,7 @@ public class ProductCountController {
         productCountService.delete(userId,productId);
     }
 
+    @DeleteMapping("/delete-all")
+    public void deleteAllFromCart(Long id){productCountService.deleteAllFromCart(id);}
+
 }

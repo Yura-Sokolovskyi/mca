@@ -1,6 +1,7 @@
 package yurii.sokolovskyi.mca.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,4 +19,6 @@ public class CartController {
 
     @GetMapping("/get-user-cart")
     public List<CartProductResponse> getAllForSelect(Long id){return cartService.getProductsByUser(id);}
+
+
 }

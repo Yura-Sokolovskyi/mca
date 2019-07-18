@@ -21,7 +21,7 @@ public class CartService {
     private CartRepository cartRepository;
 
     @Autowired
-    private ProductCountRepository productCountRepository;
+    private ProductCountService productCountService;
 
     @Autowired
     private UserRepository userRepository;
@@ -37,7 +37,5 @@ public class CartService {
         return userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("User with id " + id + " not exists")).getCart();
     }
-
-
 
 }

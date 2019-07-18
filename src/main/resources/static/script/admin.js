@@ -1,8 +1,8 @@
 
-let modal = $('#myModal');
-let modalTitle = $('#myModalLabel');
-let modalBody = $('.modal-body');
-let modalFooter = $('.modal-footer');
+// let modal = $('#myModal');
+// let modalTitle = $('#myModalLabel');
+// let modalBody = $('.modal-body');
+// let modalFooter = $('.modal-footer');
 let adminMenuItems = $('.sc-admin-menu-item');
 
 
@@ -211,11 +211,11 @@ function loadCategoryPage() {
     });
 }
 
-$('#myModal').on('hidden.bs.modal', function (e) {
-    modalTitle.text("");
-    modalBody.text("");
-    modalFooter.text("");
-});
+// $('#myModal').on('hidden.bs.modal', function (e) {
+//     modalTitle.text("");
+//     modalBody.text("");
+//     modalFooter.text("");
+// });
 
 function getBase64(file) {
     return new Promise((resolve, reject) => {

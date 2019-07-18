@@ -6,6 +6,7 @@ import yurii.sokolovskyi.mca.entity.Role;
 import yurii.sokolovskyi.mca.entity.User;
 
 import javax.persistence.criteria.*;
+import java.util.regex.Pattern;
 
 public class UserSpecification implements Specification<User> {
 
@@ -18,6 +19,8 @@ public class UserSpecification implements Specification<User> {
 
     @Override
     public Predicate toPredicate(Root<User> r, CriteriaQuery<?> cq, CriteriaBuilder cb) {
+
+
 
         return cb.and(findByName(r,cb),findByPhone(r,cb),findByRole(r,cb));
     }
@@ -35,7 +38,7 @@ public class UserSpecification implements Specification<User> {
 
     private Predicate findByName (Root<User> r, CriteriaBuilder cb){
         Predicate predicate;
-        if (criteria.getName() != null){
+        if (criteria.getName() != null && !stringContainsNumber(criteria.getName())){
             predicate = cb.like(r.get("name"), '%' + criteria.getName() + '%');
         } else {
             predicate = cb.conjunction();
@@ -45,7 +48,7 @@ public class UserSpecification implements Specification<User> {
 
     private Predicate findByPhone (Root<User> r, CriteriaBuilder cb){
         Predicate predicate;
-        if (criteria.getPhoneNumber() != null){
+        if (criteria.getPhoneNumber() != null && stringContainsNumber(criteria.getPhoneNumber())){
             predicate = cb.like(r.get("phoneNumber"), '%' + criteria.getPhoneNumber() + '%');
         } else {
             predicate = cb.conjunction();
@@ -53,5 +56,10 @@ public class UserSpecification implements Specification<User> {
         return predicate;
     }
 
+
+    private boolean stringContainsNumber( String s )
+    {
+        return Pattern.compile( "[0-9]" ).matcher( s ).find();
+    }
 
 }

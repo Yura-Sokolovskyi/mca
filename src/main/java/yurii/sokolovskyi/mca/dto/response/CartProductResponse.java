@@ -18,6 +18,6 @@ public class CartProductResponse {
         this.id = productCount.getProduct().getId();
         this.count = productCount.getCount();
         this.name = productCount.getProduct().getName();
-        this.price = productCount.getProduct().getPrice()*count;
+        this.price =  productCount.getProduct().getPrice()*count;
     }
 }

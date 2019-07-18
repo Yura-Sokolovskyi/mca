@@ -8,12 +8,8 @@ import yurii.sokolovskyi.mca.entity.Cart;
 import yurii.sokolovskyi.mca.entity.ProductCount;
 
 import java.util.List;
-import java.util.Map;
 
 @Repository
 public interface ProductCountRepository extends JpaRepository<ProductCount, Long> {
-
     ProductCount findProductCountByCartAndProductId(Cart cart , Long productId);
-
-
 }
