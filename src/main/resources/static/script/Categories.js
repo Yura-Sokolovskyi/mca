@@ -171,6 +171,35 @@ $(document).on('click', '.sc-discount-order-button', ()=>{
 
 });
 
+$(document).on('click', '.sc-confirm-order-button', ()=>{
+
+    let $userId = $('.sc-client-select-title').data("id");
+
+    let request = {
+        userId: $userId
+    };
+    $.ajax({
+        url: 'http://localhost:8080/order',
+        contentType: 'application/json',
+        type: 'post',
+        data: JSON.stringify(request),
+        success: function () {
+            getUserCart();
+            calculateOrderSum();
+            modalTitle.text("Success");
+            modalBody.text("Order successfully created");
+            modalFooter.append(`
+                <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                `);
+            modal.modal();
+
+        }
+    });
+
+
+
+});
+
 
 function getUsersForSelect(value) {
     let paginationRequest = {

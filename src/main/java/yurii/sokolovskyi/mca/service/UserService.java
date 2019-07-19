@@ -39,6 +39,10 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
+    public User findOne(Long id){
+        return userRepository.getOne(id);
+    }
+
 
 
 
