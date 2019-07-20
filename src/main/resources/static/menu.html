@@ -106,7 +106,7 @@
 
                                 <div class="sc-client-select sc-flex-centred">
 
-                                    <input class="sc-client-select-title" data-id="2" value="Select client">
+                                    <input class="sc-client-select-title" data-id="2" value="Select client" readonly>
 
                                     <div class="sc-client-select-ico">
                                         <svg xmlns="http://www.w3.org/2000/svg" height="15" fill="#ffffff"
@@ -147,9 +147,17 @@
                             <div class="sc-order-info-container">
 
 
+                                <div class="sc-order-info-discount-container" data-value="">
+                                    <div class="sc-order-info-item-title">
+                                        Discount:
+                                    </div>
+                                    <div class="sc-order-info-item-info" >
+                                        00<sup>00</sup>
+                                    </div>
+                                </div>
                                 <div class="sc-order-info-item-container">
                                     <div class="sc-order-info-item-title">
-                                        До оплати:
+                                        Total price:
                                     </div>
                                     <div class="sc-order-info-item-info">
                                         00<sup>00</sup>
@@ -185,14 +193,34 @@
 </div>
 
 
+
 <!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+
+<div id="infoModal" class="modal fade">
+    <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="icon-box">
+                    <i class="material-icons"></i>
+                </div>
+                <h4 class="modal-title">Awesome!</h4>
+            </div>
+            <div class="modal-body">
+                <p class="text-center">Your booking has been confirmed. Check your email for detials.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success btn-block" data-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel"></h4>
+                <h4 class="modal-title" id="ModalLabel"></h4>
             </div>
             <div class="modal-body">
             </div>
@@ -203,7 +231,8 @@
     </div>
 </div>
 </div>
-
+<!-- Modal-end -->
+<!--templates-->
 <script type="text/template" id="cartItem">
     <div class="sc-order-product-item-container" data-id="${id}"  data-price="${priceDouble}" data-all-price="${allPrice}">
 
@@ -256,7 +285,7 @@
         </div>
 
     </div></script>
-
+<!--templates-end-->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="http://ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"></script>
 <script type="text/javascript" src="script/Bootstrap%20v3.3.7.js"></script>

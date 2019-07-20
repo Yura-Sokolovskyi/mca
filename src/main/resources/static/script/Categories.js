@@ -3,7 +3,6 @@
  */
 $(document).ready(function(){
     appendCategoryToMenu();
-    //getUsersForSelect();
     getUserCart();
 });
 
@@ -174,27 +173,27 @@ $(document).on('click', '.sc-discount-order-button', ()=>{
 $(document).on('click', '.sc-confirm-order-button', ()=>{
 
     let $userId = $('.sc-client-select-title').data("id");
+    let $productItemsQuantyti = $('.sc-order-product-item-container').length;
+    if($productItemsQuantyti === 0){
+        showModal("error","Ops","There are no products in cart")
+    } else {
+        let request = {
+            userId: $userId
+        };
+        $.ajax({
+            url: 'http://localhost:8080/order',
+            contentType: 'application/json',
+            type: 'post',
+            data: JSON.stringify(request),
+            success: function () {
+                getUserCart();
+                calculateOrderSum();
+                showModal("success","Success","Order successfully created")
+            }
+        });
+    }
 
-    let request = {
-        userId: $userId
-    };
-    $.ajax({
-        url: 'http://localhost:8080/order',
-        contentType: 'application/json',
-        type: 'post',
-        data: JSON.stringify(request),
-        success: function () {
-            getUserCart();
-            calculateOrderSum();
-            modalTitle.text("Success");
-            modalBody.text("Order successfully created");
-            modalFooter.append(`
-                <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
-                `);
-            modal.modal();
 
-        }
-    });
 
 
 
@@ -348,13 +347,20 @@ function checkItemsInCart(id) {
 
 function calculateOrderSum() {
     let sum = 0.0;
+    let discount = $('.sc-order-info-discount-container').attr("data-value");
+    console.log(discount);
     $('.sc-order-product-item-container').each(function() {
-        sum += $(this).data("price");
+        sum += parseFloat($(this).data("price"));
     });
 
+    if(discount > 0){
+        sum = sum - sum*discount;
+    }
+    $('.sc-order-info-discount-container .sc-order-info-item-info').html(doubleToStringsByDot(sum*discount)[0]
+        + "<sup>" + doubleToStringsByDot(sum*discount)[1] +"</sup>");
 
-    $('.sc-order-info-item-info').text(doubleToStringsByDot(sum)[0])
-                                    .append("<sup>"+ doubleToStringsByDot(sum)[1] +"</sup>");
+    $('.sc-order-info-item-container .sc-order-info-item-info').html(doubleToStringsByDot(sum)[0]
+        + "<sup>" + doubleToStringsByDot(sum)[1] +"</sup>");
 
 }
 
@@ -483,6 +489,7 @@ function closeSelect() {
 function getUserCart() {
     $('.sc-order-products-container .sc-order-product-item-container').remove();
     let userId = $('.sc-client-select-title').data("id");
+    getDiscount(userId);
     $.ajax({
         url: 'http://localhost:8080/cart/get-user-cart?id=' + userId,
         type: 'get',
@@ -490,8 +497,22 @@ function getUserCart() {
             for (let product of response) {
                 addProductToCart(product);
             }
+
         }
     });
 
 }
 
+function getDiscount(id) {
+
+    $.ajax({
+        url: 'http://localhost:8080/discount?id=' + id,
+        type: 'get',
+        success: function (response) {
+            console.log(response.discount);
+                $('.sc-order-info-discount-container').attr("data-value",response.discount);
+        }
+    });
+
+
+}
