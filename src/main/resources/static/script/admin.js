@@ -1,13 +1,11 @@
 
-// let modal = $('#myModal');
-// let modalTitle = $('#myModalLabel');
-// let modalBody = $('.modal-body');
-// let modalFooter = $('.modal-footer');
+
+$(document).ready(function () {
+    buildAdminOrderPage(null,null,null,0,12,"createDateTime","ASC");
+});
+
 let adminMenuItems = $('.sc-admin-menu-item');
 
-
-buildAdminCategoryPage();
-loadCategoryPage();
 
 adminMenuItems.click(()=>{
 
@@ -30,6 +28,23 @@ $(document).on('change','#sc-admin-category-img',()=>{
     }
 });
 
+$(document).on('click','.sc-admin-product-img',()=>{
+    $('#sc-admin-product-img').click();
+});
+
+$(document).on('change','#sc-admin-category-img',()=>{
+    let file = $('#sc-admin-product-img')[0].files[0];
+    let reader = new FileReader();
+    reader.onloadend = function () {
+        $('.sc-admin-product-img').css('background-image', 'url("' + reader.result + '")');
+        $('.sc-admin-product-img').data("name", file.name.split('.')[0]);
+    }
+    if (file) {
+        reader.readAsDataURL(file);
+    } else {
+    }
+});
+
 $(document).on('click','.sc-admin-delete-button',(e)=>{
     let targetElement = $(e.target.parentElement);
     let id = targetElement.data("id");
@@ -38,7 +53,7 @@ $(document).on('click','.sc-admin-delete-button',(e)=>{
     removeFromBD(id, type, targetElement);
 });
 
-$(document).on('click','.add-button',()=>{
+$(document).on('click','.category-add-button',()=>{
     let categoryInfo = {
         'name': "default",
         'color': "#000000",
@@ -53,6 +68,23 @@ $(document).on('click','.add-button',()=>{
                 `);
     modal.modal();
     editColor();
+});
+
+$(document).on('click','.product-add-button',()=>{
+    let product = {
+        "name": "default",
+        "price": "0.0",
+        "info": "info",
+        "image": "images/default.jpg"
+    };
+    modalTitle.text("Add product");
+    $('#adminProductModal').tmpl(product).appendTo(modalBody);
+
+    modalFooter.append(`
+                <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                <button data-id="" type="button" class="btn btn-danger save-product-changes">Save</button>
+                `);
+    modal.modal();
 });
 
 $(document).on('click','.sc-admin-edit-button',(e)=>{
@@ -87,6 +119,198 @@ $(document).on('click','.delete-product-by-category', (e)=>{
     deleteProductByCategory(categoryId);
 });
 
+$(document).on('click','.sc-admin-menu-item', (e)=>{
+    $('.sc-admin-menu-item').removeClass('active');
+    $(e.target).addClass('active');
+    let target = $(e.target).data('target');
+    if(target === "category"){
+        buildAdminCategoryPage();
+    } else if (target === "orders"){
+        buildAdminOrderPage(null,null,null,0,12,"createDateTime","ASC");
+    } else if (target === "products"){
+        buildAdminProductPage(null,null,0,12,"name","ASC");
+    } else if (target === "users"){
+        buildAdminUserPage(null,null,null,0,12,"name","ASC");
+    }else if (target === "ingredients"){
+        buildAdminIngredientPage(null,0,12,"name","ASC");
+    }
+});
+
+
+function buildAdminCategoryPage() {
+    clearRightBlock();
+    $('#adminPageCategoryHeader').tmpl().appendTo('.sc-admin-right-block');
+    $.ajax({
+        url: 'http://localhost:8080/category',
+        type: 'get',
+        success: function (response) {
+            for (let category of response) {
+                $('#adminCategoryTemplate').tmpl(category).appendTo('.sc-admin-right-block tbody');
+            }
+
+            $('.sc-admin-right-block tbody tr').fadeIn();
+        }
+    });
+}
+function buildAdminOrderPage(name, date, status,page, size, sortingField, direction) {
+    clearRightBlock();
+    $('#adminPageOrderHeader').tmpl().appendTo('.sc-admin-right-block');
+
+    let paginationRequest = {
+        "direction": direction,
+        "field": sortingField,
+        "page": page,
+        "size": size
+    };
+
+    let request = {
+        "date": date,
+        "name": name,
+        "paginationRequest": paginationRequest,
+        "status": status
+
+    };
+
+    $.ajax({
+        url: 'http://localhost:8080/order/find-by-filter',
+        contentType: 'application/json',
+        type: 'post',
+        data: JSON.stringify(request),
+        success: function (response) {
+            for (let order of response) {
+
+                checkStatus(order);
+
+                $('#adminOrderTemplate').tmpl(order).appendTo('.sc-admin-right-block tbody');
+            }
+
+            $('.sc-admin-right-block tbody tr').fadeIn();
+        }
+    });
+
+}
+function buildAdminProductPage(name, categoryId, page, size, sortingField, direction) {
+    clearRightBlock();
+    $('#adminPageProductsHeader').tmpl().appendTo('.sc-admin-right-block');
+
+    let paginationRequest = {
+        "direction": direction,
+        "field": sortingField,
+        "page": page,
+        "size": size
+    };
+
+    let request = {
+        "categoryId": categoryId,
+        "name": name,
+        "paginationRequest": paginationRequest
+
+    };
+
+    $.ajax({
+        url: 'http://localhost:8080/product/find-by-filter',
+        contentType: 'application/json',
+        type: 'post',
+        data: JSON.stringify(request),
+        success: function (response) {
+            for (let product of response) {
+
+                $('#adminProductsTemplate').tmpl(product).appendTo('.sc-admin-right-block tbody');
+            }
+
+            $('.sc-admin-right-block tbody tr').fadeIn();
+        }
+    });
+
+}
+function buildAdminUserPage(name, phone, role, page, size, sortingField, direction) {
+    clearRightBlock();
+    $('#adminPageUserHeader').tmpl().appendTo('.sc-admin-right-block');
+
+    let paginationRequest = {
+        "direction": direction,
+        "field": sortingField,
+        "page": page,
+        "size": size
+    };
+
+    let request = {
+        "phoneNumber": phone,
+        "name": name,
+        "role": role,
+        "paginationRequest": paginationRequest
+    };
+
+    $.ajax({
+        url: 'http://localhost:8080/user/admin/findByFilter',
+        contentType: 'application/json',
+        type: 'post',
+        data: JSON.stringify(request),
+        success: function (response) {
+            for (let user of response) {
+                checkActive(user);
+                $('#adminUserTemplate').tmpl(user).appendTo('.sc-admin-right-block tbody');
+            }
+
+            $('.sc-admin-right-block tbody tr').fadeIn();
+        }
+    });
+
+}
+function buildAdminIngredientPage(name, page, size, sortingField, direction) {
+    clearRightBlock();
+    $('#adminPageIngredientHeader').tmpl().appendTo('.sc-admin-right-block');
+
+    let paginationRequest = {
+        "direction": direction,
+        "field": sortingField,
+        "page": page,
+        "size": size
+    };
+
+    let request = {
+        "name": name,
+        "paginationRequest": paginationRequest
+    };
+
+    $.ajax({
+        url: 'http://localhost:8080/ingredient',
+        contentType: 'application/json',
+        type: 'post',
+        data: JSON.stringify(request),
+        success: function (response) {
+            for (let ingredient of response) {
+                $('#adminIngredientTemplate').tmpl(ingredient).appendTo('.sc-admin-right-block tbody');
+            }
+
+            $('.sc-admin-right-block tbody tr').fadeIn();
+        }
+    });
+
+}
+function checkStatus(order) {
+    if (order.status){
+        order.status = "finished";
+        order.color = "limegreen";
+    } else {
+        order.status = "unfinished";
+        order.color = "#f44336";
+    }
+
+}
+function checkActive(user) {
+    if (user.active){
+        user.color = "limegreen";
+    } else {
+        user.color = "#f44336";
+    }
+
+}
+
+function clearRightBlock() {
+    $('.sc-admin-right-block').empty();
+}
+
 function editColor(){
 
     $('.sc-admin-category-color').colorpicker();
@@ -94,14 +318,6 @@ function editColor(){
     $('.sc-admin-category-color').on('changeColor',(e)=>{
         $('.sc-admin-category-color').css('background-color',e.color.toString());
     });
-}
-
-function appendCategory(category) {
-    $('#adminCategoryTemplate').tmpl(category).appendTo('.sc-admin-right-block tbody');
-}
-
-function buildAdminCategoryPage() {
-    $('#adminPageHeader').tmpl().appendTo('.sc-admin-right-block');
 }
 
 function editCategory() {
@@ -197,25 +413,6 @@ function deleteProductByCategory(id) {
     });
 }
 
-function loadCategoryPage() {
-    $.ajax({
-        url: 'http://localhost:8080/category',
-        type: 'get',
-        success: function (response) {
-            for (let category of response) {
-                appendCategory(category);
-            }
-
-            $('.sc-admin-right-block tbody tr').fadeIn();
-        }
-    });
-}
-
-// $('#myModal').on('hidden.bs.modal', function (e) {
-//     modalTitle.text("");
-//     modalBody.text("");
-//     modalFooter.text("");
-// });
 
 function getBase64(file) {
     return new Promise((resolve, reject) => {

@@ -22,6 +22,6 @@ public class Discount {
 
     private String type;
 
-    @ManyToMany(mappedBy = "discounts")
+    @OneToMany (mappedBy = "discount")
     private List<User> users = new ArrayList<>();
 }

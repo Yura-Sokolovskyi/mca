@@ -5,9 +5,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -29,6 +29,8 @@ public class User {
 
     private Boolean active;
 
+    private LocalDate birthDate;
+
     @OneToMany (mappedBy = "user")
     private List<Invoice> invoices = new ArrayList<>();
 
@@ -44,8 +46,8 @@ public class User {
     @OneToOne
     private Cart cart;
 
-    @ManyToMany
-    private List<Discount> discounts = new ArrayList<>();
+    @ManyToOne
+    private Discount discount;
 
     @OneToOne
     private DiscountCard discountCard;

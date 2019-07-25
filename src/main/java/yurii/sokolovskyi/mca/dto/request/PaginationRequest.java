@@ -20,7 +20,7 @@ public class PaginationRequest {
     @NotNull
     private String field;
 
-    public Pageable toPgeable() {
+    public Pageable toPageable() {
         return PageRequest.of(page,size,direction,field);
     }
 }

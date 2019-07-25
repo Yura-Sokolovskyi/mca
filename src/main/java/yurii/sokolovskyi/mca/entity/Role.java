@@ -8,8 +8,6 @@ import javax.persistence.*;
 
 @Getter
 @NoArgsConstructor
-
-
 public enum  Role {
  ADMIN, CLIENT, WORKER
 }

@@ -32,7 +32,12 @@ public class UserController {
     }
 
     @PostMapping("/findByFilter")
-    public List<UserResponse> findByFilter (@Valid @RequestBody UserCriteria userCriteria){
-        return userService.findByCriteria(userCriteria);
+    public List<UserResponse> findByFilter (@Valid @RequestBody UserCriteria criteria){
+        return userService.findByCriteria(criteria);
+    }
+
+    @PostMapping("/admin/findByFilter")
+    public List<UserAdminResponse> findByFilterForAdmin (@Valid @RequestBody UserCriteria criteria){
+        return userService.findByCriteriaForAdmin(criteria);
     }
 }

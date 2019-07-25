@@ -34,9 +34,7 @@ public class ProductCountService {
     }
 
     public CartProductResponse update(ProductCountRequest request) {
-
         ProductCount productCount = getProductCount(request.getUserId(),request.getProductId());
-
         if (productCount == null) {
             productCount = new ProductCount();
             productCountRepository.save(productCount);
@@ -51,7 +49,6 @@ public class ProductCountService {
             } else {
                 productCount.setCount(request.getCount());
             }}
-
             productCountRepository.save(productCount);
         return new CartProductResponse(productCount);
     }

@@ -13,6 +13,7 @@ public class ProductResponse {
     private String image;
     private Double price;
     private String info;
+    private String category;
 
 
     public ProductResponse(Product product) {
@@ -21,5 +22,6 @@ public class ProductResponse {
         image = product.getImage();
         price = product.getPrice();
         info = product.getInfo();
+        category = product.getCategory().getName();
     }
 }

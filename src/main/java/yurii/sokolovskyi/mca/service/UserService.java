@@ -22,14 +22,14 @@ public class UserService {
 
 
     public PageResponse<UserSelectResponse> findPage (PaginationRequest paginationRequest){
-        Page<User> page = userRepository.findAll(paginationRequest.toPgeable());
+        Page<User> page = userRepository.findAll(paginationRequest.toPageable());
         return new PageResponse<>(page.getTotalPages(),
                 page.getTotalElements(),
                 page.get().map(UserSelectResponse::new).collect(Collectors.toList()));
     }
 
     public List<UserResponse> findByCriteria (UserCriteria criteria){
-        return userRepository.findAll(new UserSpecification(criteria), criteria.getPaginationRequest().toPgeable())
+        return userRepository.findAll(new UserSpecification(criteria), criteria.getPaginationRequest().toPageable())
                 .stream().map(UserResponse::new).collect(Collectors.toList());
     }
 
@@ -39,12 +39,9 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    public User findOne(Long id){
-        return userRepository.getOne(id);
+
+    public List<UserAdminResponse> findByCriteriaForAdmin(UserCriteria criteria) {
+        return userRepository.findAll(new UserSpecification(criteria), criteria.getPaginationRequest().toPageable())
+                .stream().map(UserAdminResponse::new).collect(Collectors.toList());
     }
-
-
-
-
-
 }

@@ -2,7 +2,6 @@ package yurii.sokolovskyi.mca.specification;
 
 import org.springframework.data.jpa.domain.Specification;
 import yurii.sokolovskyi.mca.dto.request.UserCriteria;
-import yurii.sokolovskyi.mca.entity.Role;
 import yurii.sokolovskyi.mca.entity.User;
 
 import javax.persistence.criteria.*;
@@ -12,15 +11,12 @@ public class UserSpecification implements Specification<User> {
 
     private UserCriteria criteria;
 
-
     public UserSpecification(UserCriteria userCriteria) {
         this.criteria = userCriteria;
     }
 
     @Override
     public Predicate toPredicate(Root<User> r, CriteriaQuery<?> cq, CriteriaBuilder cb) {
-
-
 
         return cb.and(findByName(r,cb),findByPhone(r,cb),findByRole(r,cb));
     }

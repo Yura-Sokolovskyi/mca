@@ -27,6 +27,12 @@ public class Order {
 
     private Boolean finished;
 
+    @CreationTimestamp
+    private LocalDateTime createDateTime;
+
+    @UpdateTimestamp
+    private LocalDateTime updateDateTime;
+
     @ManyToOne
     private User user;
 

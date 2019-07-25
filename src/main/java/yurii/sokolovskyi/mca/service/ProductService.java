@@ -2,12 +2,14 @@ package yurii.sokolovskyi.mca.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import yurii.sokolovskyi.mca.dto.request.ProductCriteria;
 import yurii.sokolovskyi.mca.dto.request.ProductRequest;
 import yurii.sokolovskyi.mca.dto.response.ProductResponse;
 import yurii.sokolovskyi.mca.entity.Category;
 import yurii.sokolovskyi.mca.entity.IngredientCount;
 import yurii.sokolovskyi.mca.entity.Product;
 import yurii.sokolovskyi.mca.repository.ProductRepository;
+import yurii.sokolovskyi.mca.specification.ProductSpecification;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,4 +70,12 @@ public class ProductService {
                 .forEach(product -> productRepository.delete(product));
         categoryService.delete(id);
     }
+
+    public List<ProductResponse> finByCriteria (ProductCriteria criteria){
+       return productRepository.findAll(new ProductSpecification(criteria), criteria.getPaginationRequest()
+               .toPageable()).stream().map(ProductResponse::new).collect(Collectors.toList());
+    }
+
+
+
 }
